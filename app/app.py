@@ -77,17 +77,17 @@ def run(argv=None):
         dest='output',
         required=True,
         help='Output file to write results to.')
-    parser.add_argument(
-        '--monthly',
-        dest='monthly',
-        action='store_true',
-        help='If data source is monthly, else assumed as yearly'
-    )
+    # parser.add_argument(
+    #     '--monthly',
+    #     dest='monthly',
+    #     action='store_true',
+    #     help='If data source is monthly, else assumed as yearly'
+    # )
     known_args, pipeline_args = parser.parse_known_args(argv)
     pipeline_options = PipelineOptions(pipeline_args)
 
-    if not known_args.monthly:
-        KEYS.pop(-1)
+    # if not known_args.monthly:
+    #     KEYS.pop(-1)
 
     with beam.Pipeline(options=pipeline_options) as p:
         lines = p | ReadFromText(known_args.input)

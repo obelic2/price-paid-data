@@ -20,3 +20,13 @@ error out. Instead the key is null in the end.
 to memory limitations
 
 ## Next Steps
+
+- Move system into GCP
+- Add pipeline using Dataflow as the runner
+- Make the data available in BigQuery
+- Ensure that the data structure aligns with the use cases or stakeholder
+expectations
+- Set up infrastructure using Terraform
+- Download the source file from the URL
+- Set up schedule to download latest month of data each month
+- Automate build using CI/CD tool

@@ -15,6 +15,35 @@ from apache_beam.io import ReadFromText
 from apache_beam.io import WriteToText
 from apache_beam.options.pipeline_options import PipelineOptions
 
+KEYS = [
+    'transaction_id',
+    'price',
+    "transfer_date",
+    'postcode',
+    'property_type',
+    'old_new',
+    'duration',
+    'paon',
+    'saon',
+    'street',
+    'locality',
+    'town_city',
+    'district',
+    'county',
+    'ppd_category_type',
+    'record_status'
+]
+
+class CreateJSONObject(beam.DoFn):
+    """Add keys to data fields"""
+
+    def process(self, element):
+        """To fill in"""
+        line = csv.DictReader([element], fieldnames=KEYS,
+                              delimiter=',', quotechar='"')
+        d = next(line)
+        yield dict(d)
+
 
 def run(argv=None):
     """Main entry point; defines and runs the wordcount pipeline."""
@@ -36,7 +65,9 @@ def run(argv=None):
     with beam.Pipeline(options=pipeline_options) as p:
         lines = p | ReadFromText(known_args.input)
 
-        data = lines | beam.Map(json.dumps)
+        data = (lines
+                | beam.ParDo(CreateJSONObject())
+                | beam.Map(json.dumps))
 
         data | WriteToText(known_args.output, file_name_suffix='.json')
 

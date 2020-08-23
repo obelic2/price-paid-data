@@ -34,22 +34,34 @@ KEYS = [
     'record_status'
 ]
 
-class CreateJSONObject(beam.DoFn):
-    """Add keys to data fields"""
+class CreateAddressObject(beam.DoFn):
+    """Create Address object using address as key"""
 
     def process(self, element):
-        """To fill in"""
+        """Unpacks the CSV and add key names and creates address object"""
+
         line = csv.DictReader([element], fieldnames=KEYS,
                               delimiter=',', quotechar='"')
         data = dict(next(line))
+
+        # Create the address key name
         address = ' '.join([data[key] for key in 
             ['paon', 'saon', 'street', 'locality', 'town_city',
             'district', 'county', 'postcode'] if data[key]])
-        address_data = {
-            address: [data]
-        }
+        address_data = (address, data)
         yield address_data
 
+
+class FormJson(beam.DoFn):
+    """Pack up objects as JSON for export"""
+
+    def process(self, element):
+        """Likely a better way to accomplish this"""
+
+        dict_object = {
+            element[0]: element[1]
+        }
+        yield dict_object
 
 def run(argv=None):
     """Main entry point; defines and runs the transform pipeline."""
@@ -81,7 +93,9 @@ def run(argv=None):
         lines = p | ReadFromText(known_args.input)
 
         data = (lines
-                | beam.ParDo(CreateJSONObject())
+                | beam.ParDo(CreateAddressObject())
+                | beam.GroupByKey()
+                | beam.ParDo(FormJson())
                 | beam.Map(json.dumps))
 
         data | WriteToText(known_args.output, file_name_suffix='.json')

@@ -8,6 +8,29 @@ In the local environment, Docker is used to build Apache Beam pipelines for the
 transformation of data. Within the cloud environment GCP Dataflow is used as the
 orchestratory and data is moved into BigQuery for analysis purposes.
 
+## Setup Instructions
+
+NOTE: For this to work locally, you will require Python and Docker on your
+machine. This was built using:
+- Docker 19.03.12
+
+Run in the main folder directory:
+
+1. `sh setup.sh`
+2. `docker-compose build`
+3. `docker-compose up -d`
+
+The folder environemnt should be complete, and the docker container should be
+running! In order to process a file with the module:
+
+1. Add a file into the `data` folder. If you ran the `setup.sh` script, a
+`monthly.csv` file should be in there as a test
+2. Run the command: `docker-compose exec python_beam sh -c "python -m app.app --input data/ --output result/test"`
+
+Your results will be stored in the `results` folder, or whichever folder you
+specified in the command above. The file is stored as JSONLines grouped by
+address.
+
 ## Known issues
 
 - Running the pipeline for a monthly file without specifying the flag doesn't

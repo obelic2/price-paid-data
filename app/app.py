@@ -41,8 +41,14 @@ class CreateJSONObject(beam.DoFn):
         """To fill in"""
         line = csv.DictReader([element], fieldnames=KEYS,
                               delimiter=',', quotechar='"')
-        d = next(line)
-        yield dict(d)
+        data = dict(next(line))
+        address = ' '.join([data[key] for key in 
+            ['paon', 'saon', 'street', 'locality', 'town_city',
+            'district', 'county', 'postcode'] if data[key]])
+        address_data = {
+            address: [data]
+        }
+        yield address_data
 
 
 def run(argv=None):

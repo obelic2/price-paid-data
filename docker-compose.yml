@@ -1,0 +1,13 @@
+# Create the docker environment to run Apache Beam
+
+version: '3'
+services:
+  python:
+    build:
+      context: ./
+      dockerfile: python/Dockerfile
+    volumes:
+        - ./data:/data
+        - ./app:/app
+        - ./result:/result
+    container_name: python_runtime

@@ -2,7 +2,7 @@
 
 version: '3'
 services:
-  python:
+  python_beam:
     build:
       context: ./
       dockerfile: python/Dockerfile

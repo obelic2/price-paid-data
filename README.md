@@ -4,14 +4,33 @@ This repository is for the analysis of UK housing price data.
 
 Data transformations are conducted using Apache Beam.
 
-In the local environment, Docker is used to build Apache Beam pipelines for the
-transformation of data. Within the cloud environment GCP Dataflow is used as the
-orchestratory and data is moved into BigQuery for analysis purposes.
+## Design Overview
+
+The aim of this pipeline design is to maximize portability between different
+systems, including local machines and the cloud. To this end, Docker containers
+were used to standardise the processing environment and maintain replicability
+across systems.
+
+Python 3.7.9 Slim Buster edition was used as the base image, as this is the
+highest supported Python version for Apache Beam. To this only Apache Beam is
+required to be installed.
+
+Within the pipeline itself, the CSV is transformed into an address object,
+with the key being the long-form address of the property. This was used to
+minimise incorrect property matches from neighbouring properties. I also don't
+entirely know the pertinent parts of an address in the UK, so this could likely
+be shortened and have the same accuracy.
+
+Migrating the solution to the cloud would be straightforward. As this already
+uses Apache Beam, using Dataflow as the runner should be no issue. This should
+also reduce (or eliminate) the requirement of using Docker. The data can then
+be added to BigQuery for any analysis.
 
 ## Setup Instructions
 
 NOTE: For this to work locally, you will require Python and Docker on your
 machine. This was built using:
+
 - Docker 19.03.12
 
 Run in the main folder directory:

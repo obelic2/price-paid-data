@@ -40,7 +40,12 @@ Run in the main folder directory:
 3. `docker-compose up -d`
 
 The folder environemnt should be complete, and the docker container should be
-running! In order to process a file with the module:
+running! You can check if the status of the container is "Up" or not using the
+command: `docker ps`
+
+The image will be labelled `price-paid-data_python_beam`.
+
+In order to process a file with the module:
 
 1. Add a file into the `data` folder. If you ran the `setup.sh` script, a
 `monthly.csv` file should be in there as a test

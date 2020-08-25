@@ -4,3 +4,9 @@ result/
 data/
 __pycache__/
 *.csv
+terraform/tf_vars.sh
+
+.DS_Store
+*.tfstate
+*.tfstate.backup
+.terraform

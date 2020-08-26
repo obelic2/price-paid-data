@@ -101,17 +101,20 @@ def run(argv=None):
     #     KEYS.pop(-1)
 
     with beam.Pipeline(options=pipeline_options) as p:
-        lines = p | ReadFromText(known_args.input)
+        lines = p | "read_data" >> ReadFromText(known_args.input)
 
         data = (
             lines
-            | beam.ParDo(CreateAddressObject())
-            | beam.GroupByKey()
-            | beam.ParDo(FormJson())
-            | beam.Map(json.dumps)
+            | "add_keys" >> beam.ParDo(CreateAddressObject())
+            | "group_by_address" >> beam.GroupByKey()
+            | "create_dict" >> beam.ParDo(FormJson())
+            | "create_json_string" >> beam.Map(json.dumps)
         )
 
-        data | WriteToText(known_args.output, file_name_suffix=".json")
+        data | "write_local" >> WriteToText(known_args.output, file_name_suffix=".json")
+        data | "write_cloud" >> WriteToText(
+            "gs://uk-housing-prices/test", file_name_suffix=".json"
+        )
 
 
 if __name__ == "__main__":

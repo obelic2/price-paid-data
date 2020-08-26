@@ -3,6 +3,7 @@
 version: '3'
 services:
   python_beam:
+    container_name: python_runtime
     build:
       context: ./
       dockerfile: python/Dockerfile
@@ -10,4 +11,6 @@ services:
         - ./data:/data
         - ./app:/app
         - ./result:/result
-    container_name: python_runtime
+        - $HOME/.gcp/terraform-service.json:/home/app/.gcp/credentials:ro
+    environment:
+      GOOGLE_APPLICATION_CREDENTIALS: /home/app/.gcp/credentials

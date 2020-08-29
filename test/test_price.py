@@ -1,6 +1,5 @@
 # Test suite for price paid data
 
-import pytest
 from app.app import CreateAddressObject
 
 
@@ -12,7 +11,10 @@ def test_csv_to_json():
     )
 
     expected = (
-        "3 CAMBRIDGE COURT WRINGTON BRISTOL NORTH SOMERSET NORTH SOMERSET BS40 5JL",
+        (
+            "3 CAMBRIDGE COURT WRINGTON BRISTOL "
+            "NORTH SOMERSET NORTH SOMERSET BS40 5JL"
+        ),
         {
             "transaction_id": "{A96E4ACB-D1DA-9205-E053-6C04A8C0DA09}",
             "price": "240000",

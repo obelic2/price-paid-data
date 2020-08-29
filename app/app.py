@@ -41,7 +41,9 @@ class CreateAddressObject(beam.DoFn):
     def process(self, element):
         """Unpacks the CSV and add key names and creates address object"""
 
-        line = csv.DictReader([element], fieldnames=KEYS, delimiter=",", quotechar='"')
+        line = csv.DictReader(
+            [element], fieldnames=KEYS, delimiter=",", quotechar='"'
+        )
         data = dict(next(line))
 
         # Create the address key name
@@ -111,7 +113,9 @@ def run(argv=None):
             | "create_json_string" >> beam.Map(json.dumps)
         )
 
-        data | "write_local" >> WriteToText(known_args.output, file_name_suffix=".json")
+        data | "write_local" >> WriteToText(
+            known_args.output, file_name_suffix=".json"
+        )
         data | "write_cloud" >> WriteToText(
             "gs://uk-housing-prices/test", file_name_suffix=".json"
         )

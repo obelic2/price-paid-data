@@ -1,6 +1,6 @@
 # Test suite for price paid data
 
-from app.app import CreateAddressObject
+from app.app import CreateAddressObject, AddAddressKeys
 
 
 def test_csv_to_json():
@@ -35,7 +35,9 @@ def test_csv_to_json():
         },
     )
 
+    addkeys = AddAddressKeys()
+    data = addkeys.process(input_line)
     pipe = CreateAddressObject()
-    result = pipe.process(input_line)
+    result = pipe.process(next(data))
 
     assert next(result) == expected
